@@ -1,11 +1,37 @@
 # By Pytel
 
-import Sudoku
+'''
+Oddelit class Bord a Game
+ Budu tak moci volat funkce pro Bord i v AI.
 
+'''
+
+import Sudoku
+import AI
 
 sudoku = Sudoku.Game()
-sudoku.Print()
+sudoku.player = AI.Player()
 sudoku.FillWithNumbers()
 sudoku.Print()
 valid = sudoku.ValidBord()
 print("Valid =", valid)
+
+sudoku.MakeNewGame()
+sudoku.Print()
+
+#'''
+while not sudoku.filled:
+	bord = sudoku.bord
+	move = sudoku.player.Move(bord)
+	if sudoku.ValidMove(move):
+		sudoku.ExecuteMove(move)
+	else:
+		print("Invalid move!")
+		break
+	sudoku.Print()
+	sudoku.IsFilled()
+
+print("  ---Final Bord---")
+sudoku.Print()
+
+#'''
