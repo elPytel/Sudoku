@@ -54,6 +54,8 @@ class Player:
 				break
 				
 		# neni zadny vhodny tah s jednim moznym cislem
+		#TODO
+		# neni vhodna implementace, pri slozitejsich moznostech se muze vydat spatnou cestou, ktera nema reseni!
 		if move == None or len(move) != 3:
 			least = 9
 			for place in self.free_fields:

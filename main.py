@@ -1,4 +1,5 @@
-# By Pytel
+
+exit# By Pytel
 
 '''
 Oddelit class Bord a Game
