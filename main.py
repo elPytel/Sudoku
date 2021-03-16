@@ -14,15 +14,14 @@ sudoku.player = AI.Player()
 sudoku.FillWithNumbers()
 sudoku.Print()
 valid = sudoku.bord.ValidBord()
-print("Valid =", valid)
+print(" Valid =", valid)
 
 sudoku.MakeNewGame()
 sudoku.Print()
 
 #'''
 while not sudoku.filled:
-	bord = sudoku.bord.sudokubord
-	move = sudoku.player.Move(bord)
+	move = sudoku.player.Move(sudoku.bord)
 	if sudoku.ValidMove(move):
 		sudoku.ExecuteMove(move)
 	else:
@@ -31,7 +30,9 @@ while not sudoku.filled:
 	sudoku.Print()
 	sudoku.IsFilled()
 
-print("  ---Final Bord---")
+print("---Final Bord---")
+valid = sudoku.bord.ValidBord()
+print(" Valid =", valid)
 sudoku.Print()
 
 #'''

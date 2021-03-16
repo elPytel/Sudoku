@@ -2,7 +2,8 @@
 
 import random
 
-DEBUG = True
+DEBUG = False
+MISSING = 40
 
 Numbers = []
 for number in range(1,10):
@@ -194,12 +195,6 @@ class Game:
 					index = 0
 					while index < len(numbers):
 						bord[y][x] = numbers[index]
-						# TODO BUG!
-						'''
-						print("index:", index, "number:", numbers[index], "position:", bord[y][x])
-						self.bord.Print()
-						input()
-						'''
 						# test validity
 						n = sudokubord.StartIndexToSquare(y, x)
 						if sudokubord.ValidCol(x) and sudokubord.ValidSquare(n):
@@ -295,18 +290,20 @@ class Game:
 		
 		return True
 	
-	def ExecuteMove(move):
+	def ExecuteMove(self, move):
 		bord = self.bord.sudokubord
 		y = move[0]
 		x = move[1]
 		n = move[2]
+		print("Coords: Y:", y,"X:", x, "Number:", n)
 		bord[y][x] = n
 				
 	def IsFilled(self):
 		free_fields = 0
+		bord = self.bord.sudokubord
 		for y in range(0,9):
 			for x in range(0,9):
-				if self.bord[y][x] == None:
+				if bord[y][x] == None:
 					free_fields = free_fields +1
 		
 		if free_fields == 0:
@@ -317,10 +314,13 @@ class Game:
 		#TODO prepsat na deepcop
 		self.generated_bord = self.bord
 		bord = self.bord.sudokubord
-		for n in range(15):
+		n = 0
+		while n < MISSING:
 			y = random.randrange(0, 9)
 			x = random.randrange(0, 9)
-			bord[y][x] = None
+			if bord[y][x] != None:
+				bord[y][x] = None
+				n = n +1
 		
 	def Print(self):
 		bord = self.bord.sudokubord
@@ -344,8 +344,9 @@ class Game:
 			print("|")
 		print("-"*13)
 			
-			
-			
-		
+				
+'''
 	
 
+
+'''
