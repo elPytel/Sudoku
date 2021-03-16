@@ -2,14 +2,14 @@
 
 import random
 
-DEBUG = True
+DEBUG = False
 
-numbers = []
+Numbers = []
 for number in range(1,10):
-	numbers.append(number)
+	Numbers.append(number)
 if DEBUG:
 	print(" ---Numbers---")
-	print(numbers)
+	print(Numbers)
 	print()
 
 class Game:
@@ -127,75 +127,78 @@ class Game:
 				return False
 			if self.ValidCol(n) != True:
 				return False
-			if self.ValidSquare != True:
+			if self.ValidSquare(n) != True:
 				return False
 		return True
 	
+	def MakeRandomPermutation(self):
+		numbers = []
+		for number in range(1,10):
+			repeat = True
+			while repeat == True:
+				number = random.randrange(1, 10)
+				if not number in numbers:
+					 numbers.append(number)
+					 repeat = False
+		return numbers
+	
 	def FillWithNumbers(self):
-		'''
-		while self.number_of_free_fields != 0:
-			y = random.choice(numbers)
-			x = random.choice(numbers)
-			if self.bord[y][x] == None:
-			
-			
-				if DEBUG:
-					self.Print()
-		'''
-		
 		# projde vsechny radky
 		for y in range(9):
-			# vygeneruje vsechna cisla pro dany radek
-			numbers = []
-			for number in range(1,10):
-				numbers.append(number)
-			
+			# vygeneruje permutaci vsech cisel pro dany radek
+			numbers = self.MakeRandomPermutation()
+			if DEBUG:
+				print(numbers)
+				input()
 			# rozmisti je na radku
 			for x in range(9):
 				# umisteni cisla
 				valid = False
-				tries = 0
-				while valid != True:
-					index = random.randrange(0, len(numbers))
+				index = 0
+				while index < len(numbers):
 					self.bord[y][x] = numbers[index]
-					
-					# pokud se nedari umistit dane cislo, tak si jej vymeni s jinym jiz umistenym
-					if tries > 30:
-						cursor = x
-						if DEBUG:
-							print("Placing number:", numbers[index], "to position:", x)
-						# dokud nenajde vhodneho kandidata
-						while True != False:
-							self.bord[y][x] = None
-							if cursor == 0:
-								input(" Cursor reached: 0")
-							cursor = cursor -1
-							number = self.bord[y][cursor]
-							self.bord[y][cursor] = numbers[index]
-							self.bord[y][x] = number
-							if DEBUG:
-								print("Cursor:", cursor, "| number:", number)
-								#self.Print()
-							# test validity
-							n = self.StartIndexToSquare(y, cursor)
-							z = self.StartIndexToSquare(y, x)
-							if self.ValidCol(x) and self.ValidCol(cursor) and self.ValidSquare(z) and self.ValidSquare(n):
-								if DEBUG:
-									self.Print()
-									input(" Match!")
-								break
-							if DEBUG:
-								if not self.ValidCol(cursor) or not self.ValidCol(x):
-									print("Invalid column!")
-								if not self.ValidSquare(n):
-									print("Invalid square!")
-							self.bord[y][cursor] = number
-					
 					# test validity
 					n = self.StartIndexToSquare(y, x)
-					valid = self.ValidCol(x) and self.ValidSquare(n)
-					tries = tries +1
-					
+					if self.ValidCol(x) and self.ValidSquare(n):
+						break
+					if DEBUG:
+						print("Number:", numbers[index], "Faigled!")
+					# aktualizace
+					index = index +1
+				
+				# pokud se nedari umistit z dane permutace cislo, tak si jej vymeni s jinym jiz umistenym	
+				if index >= len(numbers):
+					index = index -1	# korekce
+					cursor = x
+					if DEBUG:
+						print("Placing number:", numbers[index], "to position:", x)
+					# dokud nenajde vhodneho kandidata
+					while cursor > 0:
+						self.bord[y][x] = None
+						cursor = cursor -1
+						number = self.bord[y][cursor]
+						self.bord[y][cursor] = numbers[index]
+						self.bord[y][x] = number
+						if DEBUG:
+							print("Cursor:", cursor, "| number:", number)
+							#self.Print()
+						# test validity
+						n = self.StartIndexToSquare(y, cursor)
+						z = self.StartIndexToSquare(y, x)
+						if self.ValidCol(x) and self.ValidCol(cursor) and self.ValidSquare(z) and self.ValidSquare(n):
+							if DEBUG:
+								self.Print()
+								input(" Match!")
+							break
+						if DEBUG:
+							if not self.ValidCol(cursor) or not self.ValidCol(x):
+								print("Invalid column!")
+							if not self.ValidSquare(z) and not self.ValidSquare(n):
+								print("Invalid square!")
+						self.bord[y][cursor] = number
+						if cursor == 0:
+							input(" Cursor reached: 0")
+				print(index, "/", len(numbers))
 				numbers.pop(index)
 				
 				# vytiskne po umisteni cisla
